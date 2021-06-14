@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id          String     @id @default(uuid())
+  email       String     @unique
+  phoneNumber String?
+  UserHome    UserHome[]
+}
+
+model UserHome {
+  user         User   @relation(fields: [userId], references: [id])
+  userId       String
+  addressToken String
+  heroImageUrl String
+
+  @@id([userId, addressToken])
+}
+
+model ListingEvent {
+  addressToken String
+  id           String @id @default(uuid())
+}
+
+model ValuationEvent {
+  date         DateTime
+  value        Int
+  addressToken String
+
+  @@id([date, addressToken])
+}
